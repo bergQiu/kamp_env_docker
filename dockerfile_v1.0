@@ -1,0 +1,55 @@
+# Desc: create kamp env image
+# Date: 20200918
+# User: berg
+
+FROM ubuntu:16.04
+
+ARG PIP_SRC=https://mirrors.aliyun.com/pypi/simple/
+
+# 系统级需要的工具
+ARG TOOLS="vim wget python3.5 python3.5-dev python-qt4 libglib2.0-dev gcc"
+
+# 设置系统环境语言为中文
+ENV LANG=C.UTF-8\
+    PYTHONIOENCODING=utf-8
+
+COPY ["sources.list", "Shanghai", "get-pip.py", "requirements.txt", "uwsgi.ini", "package.json", "/tmp/"]
+
+# 修改系统时区
+RUN rm /etc/localtime \
+    && cp /tmp/Shanghai /etc/localtime \  
+    && cp /tmp/sources.list /etc/apt/ \
+    && apt-get clean -y --fix-missing --no-install-recommends \
+    && apt-get update -y --fix-missing --no-install-recommends \
+    && apt-get upgrade -y --fix-missing --no-install-recommends \
+    && for i in ${TOOLS};do apt-get install -y --fix-missing --no-install-recommends $i;done \
+    && ln -s /usr/bin/python3.5 /usr/bin/python3 
+
+RUN python3 /tmp/get-pip.py -i ${PIP_SRC} \
+    && pip3 install -r /tmp/requirements.txt -i ${PIP_SRC} \
+    && mkdir /etc/uwsgi \
+    && cp /tmp/uwsgi.ini /etc/uwsgi
+
+
+ENTRYPOINT uwsgi --ini /etc/uwsgi/uwsgi.ini && /bin/bash
+
+# 安装nodejs运行环境和相关依赖
+# ARG NPM_SRC=https://registry.npm.taobao.org
+
+# RUN apt-get install -y --fix-missing --no-install-recommends npm \
+#     && npm config set registry ${NPM_SRC} \
+#     && npm install npm@6.10.1 -g \
+#     && npm install n -g \
+#     && n 10.15.2
+
+# RUN npm install webpack@3.6.0 -g \
+#     && mkdir /home/package && cd /home/package && cp /tmp/package.json . \
+#     && npm install 
+
+
+# 若需要使用docker里面的webpack，需尝试以下解决方式
+# docker exec -it ${containe_name} /bin/bash
+# > cd /home/kamp(容器中kamp的位置)
+# > ln -s /home/package/node_modules /home/kamp/node_modules
+# > npm link webpack
+# > webpack
