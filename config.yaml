@@ -5,18 +5,15 @@
 
 Mongo:                 # 项目数据库实例参数
   Host:
-    '192.168.7.162'        # MongoDB-server IP
-    # '192.168.7.6'
+    '192.168.7.6'        # MongoDB-server IP
   Port:
-    # 50107              # MongoDB-server Port 默认27017
-    27027
+    50107              # MongoDB-server Port 默认27017
   Database:
-    # 'kamp'        # database name 
-    'kamp_test'
+    'kamp'        # database name 
   User:
-    'owner'
+    'kamp'
   Passwd:
-    'owner_p%40ssw0rd'
+    'ky18026'
 Project:
   Host:
     '0.0.0.0'          # 项目启动地址可选'127.0.0.1'、'localhost'、'0.0.0.0'
@@ -39,7 +36,7 @@ Log:
       formatter:
         simple
       level:           # 日志记录的级别
-        DEBUG
+        INFO
       filename:
         ./logs/kamp.log    # 日志文件位置
       when:            # 日志切分单位
@@ -54,7 +51,7 @@ Log:
       class:
         logging.FileHandler
       level:
-        DEBUG
+        INFO
       formatter:
         simple
       filename:
@@ -64,14 +61,14 @@ Log:
   loggers:
     productionLog:     # 成产环境使用
       level:
-        DEBUG
+        INFO
       handlers:
         [timeRoate]
       propagate:
         yes
     developLog:        # 开发环境使用
       level:
-        DEBUG
+        INFO
       handlers:
         [debug]
       propagate:

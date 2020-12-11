@@ -1,0 +1,10 @@
+# kamp 配置实例
+version: '3'
+services: 
+    kamp:
+        image: kamp_env2:v2.1
+        container_name: kampEnvT9
+        ports: 
+            - '127.0.0.1:8033:8023'
+        volumes: 
+            - /home/berg/work/proj/kamp/kamp/static/images:/home/kamp/kamp/static/images
