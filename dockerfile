@@ -17,8 +17,8 @@ ENV LANG=C.UTF-8\
 # 修改系统时区,安装系统工具
 COPY ["id_rsa", "sources.list", "Shanghai", "get-pip.py", "/tmp/"]
 RUN rm /etc/localtime \
-    && cp /tmp/Shanghai /etc/localtime \ 
     && cp /tmp/sources.list /etc/apt/ \
+    && cp /tmp/Shanghai /etc/localtime \
     && apt-get clean -y --fix-missing --no-install-recommends \
     && apt-get update -y --fix-missing --no-install-recommends \
     && apt-get upgrade -y --fix-missing --no-install-recommends \
@@ -46,7 +46,7 @@ RUN apt-get install -y --fix-missing --no-install-recommends npm \
 ARG branch=test
 
 # 配置kamp文件项目
-COPY ["projectInit.sh", "uwsgi.ini", "config.yaml", "/tmp/"]
+COPY ["projectInit.sh", "Shanghai", "uwsgi.ini", "config.yaml", "/tmp/"]
 RUN echo '/*---------- 正在创建项目文件----------*/' \
     && cd /root && mkdir .ssh && cp /tmp/id_rsa /root/.ssh/ \
     && cd /home && cp /tmp/projectInit.sh . && chmod +x projectInit.sh && ./projectInit.sh \
@@ -57,6 +57,7 @@ RUN echo '/*---------- 正在创建项目文件----------*/' \
     && npm link webpack \
     && webpack && mkdir logs \
     && mkdir /etc/uwsgi \
-    && cp /tmp/uwsgi.ini /etc/uwsgi  
+    && cp /tmp/uwsgi.ini /etc/uwsgi \
+    && cp /tmp/Shanghai /etc/localtime
 
 ENTRYPOINT uwsgi --ini /etc/uwsgi/uwsgi.ini && /bin/bash
