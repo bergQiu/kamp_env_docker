@@ -58,6 +58,10 @@ RUN echo '/*---------- 正在创建项目文件----------*/' \
     && webpack && mkdir logs \
     && mkdir /etc/uwsgi \
     && cp /tmp/uwsgi.ini /etc/uwsgi \
-    && cp /tmp/Shanghai /etc/localtime
+    && cp /tmp/Shanghai /etc/localtime \
+    && sed -i "s/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.*[0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\}/$(date +%F\ %T)/g" /home/kamp/kamp/templates/layout.html
 
+
+# RUN mkdir /var/run/sshd
+# CMD ["/usr/sbin/sshd", "-D"]
 ENTRYPOINT uwsgi --ini /etc/uwsgi/uwsgi.ini && /bin/bash

@@ -32,7 +32,8 @@ Log:
   handlers:
     timeRoate:         # 日志回滚方式
       class:
-        logging.handlers.TimedRotatingFileHandler
+        # logging.handlers.TimedRotatingFileHandler
+        kamp.utils.log_handlers.SafeRotatingFileHandler
       formatter:
         simple
       level:           # 日志记录的级别
